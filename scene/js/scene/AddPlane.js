@@ -1,7 +1,7 @@
 import * as THREE from '../../libs/threejs/three.module.js';
 
 export default function (scene) {
-  const planeTexture = new THREE.TextureLoader().load("../../textures/desktop.jpg");
+  const planeTexture = new THREE.TextureLoader().load("textures/desktop.jpg");
   planeTexture.wrapS = THREE.RepeatWrapping;
   planeTexture.wrapT = THREE.RepeatWrapping;
   const geometry = new THREE.PlaneGeometry(30, 30);

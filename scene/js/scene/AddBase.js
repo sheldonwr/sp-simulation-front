@@ -3,7 +3,7 @@ import { RoundedBoxGeometry } from '../../libs/threejs/geometries/RoundedBoxGeom
 
 export default function (scene) {
   const loader = new THREE.TextureLoader();
-  const texture = loader.load('../../textures/cube.jpg');
+  const texture = loader.load('textures/cube.jpg');
   texture.wrapS = THREE.RepeatWrapping;
   texture.wrapT = THREE.RepeatWrapping;
 
