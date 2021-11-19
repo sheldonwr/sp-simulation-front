@@ -40,9 +40,9 @@ io.on('connection', (socket) => {
 
   let positive = 1;
   setInterval(() => {
-    socket.emit('data.get', { in1: 100 * positive });
+    socket.emit('data.get', { in1: 1000 * positive });
     positive = -positive;
-  }, 10);
+  }, 1000);
 });
 
 server.listen(PORT);
