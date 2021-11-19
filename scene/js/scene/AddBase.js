@@ -4,11 +4,13 @@ import { RoundedBoxGeometry } from '../../libs/threejs/geometries/RoundedBoxGeom
 export default function (scene) {
   const loader = new THREE.TextureLoader();
   const texture = loader.load('textures/cube.jpg');
-  texture.wrapS = THREE.RepeatWrapping;
-  texture.wrapT = THREE.RepeatWrapping;
+  texture.wrapS = THREE.MirroredRepeatWrapping;
+  texture.wrapT = THREE.MirroredRepeatWrapping;
+  texture.repeat.set(3, 1);
 
-  const cube = new THREE.Mesh(new RoundedBoxGeometry(4, 4, 4, 7, 0.2), new THREE.MeshPhongMaterial({ side: THREE.DoubleSide, metal: true, shininess: 100, map: texture }));
-  cube.translateY(-2);
+  const cube = new THREE.Mesh(new RoundedBoxGeometry(8, 2, 3, 7, 0.2), new THREE.MeshPhongMaterial({ side: THREE.DoubleSide, metal: true, shininess: 100, map: texture }));
+  cube.translateX(1);
+  cube.translateY(-1);
   cube.translateZ(0.5);
   cube.castShadow = true;
   cube.receiveShadow = true;

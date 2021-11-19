@@ -7,8 +7,8 @@ export default function () {
     this.W = 1; // 宽度, width
     this.L = 6; // 长度, length
     this.Bend = 0.5;
-    this.dataMax = 2;
-    this.dataMin = 0;
+    this.BendMax = 2;
+    this.BendMin = 0;
     this.S = 1000;
   }
 
@@ -17,8 +17,8 @@ export default function () {
   gui.add(controls, 'ls');
   gui.add(controls, 'W');
   gui.add(controls, 'L');
-  gui.add(controls, 'dataMax').name('Maximum Value');
-  gui.add(controls, 'dataMin').name('Minimum Value');
+  gui.add(controls, 'BendMax');
+  gui.add(controls, 'BendMin');
   gui.add(controls, 'S').step(10);
 
   return controls;

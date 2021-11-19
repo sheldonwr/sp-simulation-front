@@ -1,7 +1,7 @@
 import * as THREE from '../../libs/threejs/three.module.js';
 
 export default function (scene) {
-  scene.add(new THREE.AmbientLight('#ffffff', 0.5));
+  scene.add(new THREE.AmbientLight(0xffffff, 0.5));
 
   var directionalLight = new THREE.DirectionalLight(0xffffff);
   directionalLight.position.set(-20, 30, -20);

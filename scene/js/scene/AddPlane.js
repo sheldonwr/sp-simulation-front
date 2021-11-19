@@ -9,6 +9,6 @@ export default function (scene) {
   const plane = new THREE.Mesh(geometry, planeMaterial);
   plane.receiveShadow = true;
   plane.rotateX(Math.PI * 0.5);
-  plane.translateZ(4);
+  plane.translateZ(2);
   scene.add(plane);
 }

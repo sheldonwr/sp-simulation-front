@@ -9,13 +9,13 @@ export default function ({ lut, controls }) {
   var visualMap = d3.select("#visual-map").append("svg").attr('height', colorHeight).attr('width', colorWidth);
   var colorText = d3.select("#color-text").append("svg").attr('height', colorTextHeight).attr('width', colorTextWidth);
   var step = 0.05;
-  var count = controls.dataMax / step;
+  var count = controls.BendMax / step;
   const textCountBreak = Math.floor(count * 3);
   const barWidth = Math.floor(colorWidth / count);
   const fontSize = 16;
 
   for (let index = 0, colorTextCounter = 0; index < count; index += step, colorTextCounter++) {
-    const colorValue = (index * controls.dataMax / count).toFixed(4);
+    const colorValue = (index * controls.BendMax / count).toFixed(4);
     const color = lut.getColor(colorValue).getStyle();
     visualMap.append('rect').attr('x', index * barWidth).attr('y', '0').attr('width', barWidth).attr('height', colorHeight).style('fill', color);
 

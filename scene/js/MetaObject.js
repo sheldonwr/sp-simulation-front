@@ -1,7 +1,8 @@
 import * as THREE from '../libs/threejs/three.module.js';
+import { createMultiMaterialObject } from '../libs/threejs/utils/SceneUtils.js';
 
 export default class MetaObject {
-  constructor({scene, controls, lut }) {
+  constructor({ scene, controls, lut }) {
     this.scene = scene;
     this.lut = lut;
     this.controls = controls;
@@ -34,8 +35,19 @@ export default class MetaObject {
     // 颜色映射
     this.makeFlex();
 
-    var material = new THREE.MeshBasicMaterial({ side: THREE.DoubleSide, vertexColors: THREE.VertexColors });
-    var mesh = new THREE.Mesh(g, material);
+    var vertexColorMaterial = new THREE.MeshBasicMaterial({ side: THREE.DoubleSide, vertexColors: THREE.VertexColors });
+    var metalMaterial = new THREE.MeshPhongMaterial({
+      side: THREE.DoubleSide,
+      color: 0xffffff,
+      emissive: 0xffffff,
+      specular: 0xffffff,
+      // transparent: true,
+      // shiness: 80,
+      // metal: true,
+      // blending: THREE.MultiplyBlending
+    });
+    // var mesh = new createMultiMaterialObject(g, [vertexColorMaterial]);
+    var mesh = new THREE.Mesh(g, vertexColorMaterial);
 
     mesh.castShadow = true;
     this.scene.add(mesh);
@@ -107,7 +119,7 @@ export default class MetaObject {
   setColor() {
     const colors = this.g.attributes.color;
     this.colorMap.forEach((y, index) => {
-      const color = this.lut.getColor(this.controls.dataMax - y);
+      const color = this.lut.getColor(this.controls.BendMax - y);
       colors.setXYZ(index, color.r, color.g, color.b);
     })
     colors.needsUpdate = true;
