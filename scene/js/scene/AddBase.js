@@ -1,5 +1,5 @@
-import * as THREE from '../../../libs/threejs/three.module.js';
-import { RoundedBoxGeometry } from '../../../libs/threejs/geometries/RoundedBoxGeometry.js';
+import * as THREE from '../../libs/threejs/three.module.js';
+import { RoundedBoxGeometry } from '../../libs/threejs/geometries/RoundedBoxGeometry.js';
 
 export default function (scene) {
   const loader = new THREE.TextureLoader();
