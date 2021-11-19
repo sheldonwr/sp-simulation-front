@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>雪浪云 - 算盘</title>
+	<link rel="icon" type="image/x-ico" href="favicon.png">
+	<link rel="stylesheet" href="styles/scene.css">
+</head>
+
+<body>
+	<div id="scene" class="scene"></div>
+	<div id="color-map" class="color-map">
+		<div id="visual-map" class="visual-map"></div>
+		<div id="color-text" class="color-text"></div>
+	</div>
+
+	<script src="./libs/socket.io.js"></script>
+	<script src="./libs/d3/d3.v7.min.js"></script>
+
+	<script type="module">
+		import { Lut } from './libs/threejs/Lut.js';
+		import * as THREE from './libs/threejs/three.module.js';
+		import { OrbitControls } from './libs/threejs/OrbitControls.js';
+		import { addPlane, addBase, addLights, renderColorMap, createControls, initRenderer } from './js/scene/index.js';
+		import connectSocket from './js/Socket.js';
+		import MetaObject from './js/MetaObject.js';
+
+		const container = document.getElementById('scene');
+
+		const controls = createControls();
+
+		const lut = new Lut('rainbow', controls.ls);
+
+		lut.setMax(controls.dataMax);
+		lut.setMin(controls.dataMin);
+
+		// socket
+		const socket = connectSocket();
+		socket.on("data.get", function (msg) {
+			controls.S = parseFloat(msg["in1"]);
+			controls.update();
+		});
+
+		function renderScene() {
+			// 3D
+			var scene = new THREE.Scene();
+			scene.background = new THREE.TextureLoader().load('textures/background.jpeg');
+
+			// add camera
+			var camera = new THREE.PerspectiveCamera(55, container.clientWidth / container.clientHeight, 0.1, 200);
+			camera.position.set(10, 10, -10);
+
+			// plane
+			addPlane(scene);
+
+			// base cube
+			addBase(scene);
+
+			// lights
+			addLights(scene);
+
+			// initialize renderer
+			var renderer = initRenderer(container);
+			container.appendChild(renderer.domElement);
+
+			const metaObj = new MetaObject({ scene, controls, lut });
+
+			var orbitControl = new OrbitControls(camera, renderer.domElement);
+
+			function animate() {
+				// 计算点坐标及颜色
+				metaObj.compute(controls.S);
+
+				renderer.render(scene, camera);
+
+				orbitControl.update();
+
+				requestAnimationFrame(animate);
+			}
+
+			window.onresize = function () {
+				camera.aspect = container.clientWidth / container.clientHeight;
+				camera.updateProjectionMatrix();
+				renderer.setSize(container.clientWidth, container.clientHeight);
+				renderColorMap({ lut, controls });
+			};
+
+			animate();
+		}
+
+		// Color Map
+		window.onload = function init() {
+			renderScene();
+			renderColorMap({ lut, controls });
+		}
+	</script>
+</body>
+
+</html>
