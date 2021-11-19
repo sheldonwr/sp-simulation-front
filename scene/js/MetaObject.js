@@ -6,6 +6,7 @@ export default class MetaObject {
     this.scene = scene;
     this.lut = lut;
     this.controls = controls;
+    this.S = 0;
 
     const { ls, W, ws } = controls;
 
@@ -41,20 +42,24 @@ export default class MetaObject {
       color: 0xffffff,
       emissive: 0xffffff,
       specular: 0xffffff,
-      // transparent: true,
-      // shiness: 80,
-      // metal: true,
-      // blending: THREE.MultiplyBlending
+      flatShading: true, // 必须设置，否则无法上色
+      shiness: 80,
+      blending: THREE.MultiplyBlending
     });
-    // var mesh = new createMultiMaterialObject(g, [vertexColorMaterial]);
-    var mesh = new THREE.Mesh(g, vertexColorMaterial);
+    var mesh = new createMultiMaterialObject(g, [metalMaterial, vertexColorMaterial]);
 
-    mesh.castShadow = true;
+    mesh.traverse(function (child) {
+      if (child instanceof THREE.Mesh) {
+        child.castShadow = true;
+        child.receiveShadow = true;
+      }
+    });
+
     this.scene.add(mesh);
   }
 
   compute() {
-    const Bend = this.forceVoltage(this.controls.S);
+    const Bend = this.forceVoltage(this.S);
     this.setPoints(Bend);
     this.setColor();
   }
@@ -118,8 +123,8 @@ export default class MetaObject {
 
   setColor() {
     const colors = this.g.attributes.color;
-    this.colorMap.forEach((y, index) => {
-      const color = this.lut.getColor(this.controls.BendMax - y);
+    this.colorMap.reverse().forEach((y, index) => {
+      const color = this.lut.getColor(Math.abs(y));
       colors.setXYZ(index, color.r, color.g, color.b);
     })
     colors.needsUpdate = true;

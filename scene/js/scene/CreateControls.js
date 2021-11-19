@@ -9,7 +9,6 @@ export default function () {
     this.Bend = 0.5;
     this.BendMax = 2;
     this.BendMin = 0;
-    this.S = 1000;
   }
 
   const gui = new GUI();
@@ -17,9 +16,10 @@ export default function () {
   gui.add(controls, 'ls');
   gui.add(controls, 'W');
   gui.add(controls, 'L');
-  gui.add(controls, 'BendMax');
+  gui.add(controls, 'BendMax').onChange(function(value) {
+    PubSub.publish('control.update.bendmax', value)
+  });
   gui.add(controls, 'BendMin');
-  gui.add(controls, 'S').step(10);
 
   return controls;
 }

@@ -37,6 +37,12 @@ app.use(function(err, req, res, next) {
 io.on('connection', (socket) => {
   clients.push(socket);
   console.log('connected');
+
+  let positive = 1;
+  setInterval(() => {
+    socket.emit('data.get', { in1: 100 * positive });
+    positive = -positive;
+  }, 10);
 });
 
 server.listen(PORT);

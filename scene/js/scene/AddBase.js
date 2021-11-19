@@ -8,9 +8,9 @@ export default function (scene) {
   texture.wrapT = THREE.MirroredRepeatWrapping;
   texture.repeat.set(3, 1);
 
-  const cube = new THREE.Mesh(new RoundedBoxGeometry(8, 2, 3, 7, 0.2), new THREE.MeshPhongMaterial({ side: THREE.DoubleSide, metal: true, shininess: 100, map: texture }));
+  const cube = new THREE.Mesh(new RoundedBoxGeometry(6, 1, 2, 7, 0.2), new THREE.MeshPhongMaterial({ side: THREE.DoubleSide, metal: true, shininess: 100, map: texture }));
   cube.translateX(1);
-  cube.translateY(-1);
+  cube.translateY(-.5);
   cube.translateZ(0.5);
   cube.castShadow = true;
   cube.receiveShadow = true;

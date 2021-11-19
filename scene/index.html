@@ -17,6 +17,7 @@
 
 	<script src="./libs/socket.io.js"></script>
 	<script src="./libs/d3/d3.v7.min.js"></script>
+	<script src="./libs/pubsub.min.js"></script>
 
 	<script type="module">
 		import { Lut } from './libs/threejs/Lut.js';
@@ -25,8 +26,12 @@
 		import { addPlane, addBase, addLights, renderColorMap, createControls, initRenderer } from './js/scene/index.js';
 		import connectSocket from './js/Socket.js';
 		import MetaObject from './js/MetaObject.js';
+		import Stats from './libs/threejs/utils/stats.module.js';
 
 		const container = document.getElementById('scene');
+
+		const stats = new Stats();
+		container.appendChild(stats.dom);
 
 		const controls = createControls();
 
@@ -34,13 +39,6 @@
 
 		lut.setMax(controls.BendMax);
 		lut.setMin(controls.BendMin);
-
-		// socket
-		const socket = connectSocket();
-		socket.on("data.get", function (msg) {
-			controls.S = parseFloat(msg["in1"]);
-			controls.update();
-		});
 
 		function renderScene() {
 			// 3D
@@ -68,13 +66,16 @@
 
 			var orbitControl = new OrbitControls(camera, renderer.domElement);
 
+			let count = 0;
 			function animate() {
 				// 计算点坐标及颜色
-				metaObj.compute(controls.S);
+				metaObj.compute(metaObj.S);
 
 				renderer.render(scene, camera);
 
 				orbitControl.update();
+
+				stats.update();
 
 				requestAnimationFrame(animate);
 			}
@@ -86,6 +87,12 @@
 				renderColorMap({ lut, controls });
 			};
 
+			// socket
+			const socket = connectSocket();
+			socket.on("data.get", function (msg) {
+				metaObj.S = parseFloat(msg["in1"]);
+			});
+
 			animate();
 		}
 
@@ -93,6 +100,11 @@
 		window.onload = function init() {
 			renderScene();
 			renderColorMap({ lut, controls });
+
+			PubSub.subscribe('controls.update.bendmax', function (value) {
+				renderColorMap({ lut, controls });
+				console.log('updated', value);
+			})
 		}
 	</script>
 </body>

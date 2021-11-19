@@ -1,4 +1,3 @@
-
 export default function ({ lut, controls }) {
   document.getElementById('visual-map').innerHTML = '';
   document.getElementById('color-text').innerHTML = '';
