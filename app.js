@@ -42,7 +42,7 @@ io.on('connection', (socket) => {
   setInterval(() => {
     socket.emit('data.get', { in1: 1000 * positive });
     positive = -positive;
-  }, 1000);
+  }, 100);
 });
 
 server.listen(PORT);

@@ -43,7 +43,6 @@ export default class MetaObject {
       emissive: 0xffffff,
       specular: 0xffffff,
       flatShading: true, // 必须设置，否则无法上色
-      shiness: 80,
       blending: THREE.MultiplyBlending
     });
     var mesh = new createMultiMaterialObject(g, [metalMaterial, vertexColorMaterial]);
