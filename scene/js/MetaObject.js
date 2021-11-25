@@ -33,7 +33,6 @@ export default class MetaObject {
     g.setAttribute('position', new THREE.BufferAttribute(g.vertices, 3).setDynamic(true));
     g.setAttribute('color', new THREE.BufferAttribute(colors, 3).setDynamic(true));
 
-    // 颜色映射
     this.makeFlex();
 
     var vertexColorMaterial = new THREE.MeshBasicMaterial({ side: THREE.DoubleSide, vertexColors: THREE.VertexColors });
