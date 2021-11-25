@@ -29,7 +29,6 @@
 		import Stats from './libs/threejs/utils/stats.module.js';
 
 		const container = document.getElementById('scene');
-		let needRender = true;
 
 		const stats = new Stats();
 		container.appendChild(stats.dom);
@@ -44,6 +43,7 @@
 		function renderScene() {
 			// 3D
 			var scene = new THREE.Scene();
+			scene.needRender = true;
 			scene.background = new THREE.TextureLoader().load('textures/background.jpeg');
 
 			// add camera
@@ -64,23 +64,22 @@
 			container.appendChild(renderer.domElement);
 
 			const metaObj = new MetaObject({ scene, controls, lut });
+			metaObj.compute(metaObj.S);
 
 			var orbitControl = new OrbitControls(camera, renderer.domElement);
 
 			orbitControl.addEventListener('change', () => {
-				orbitControl.update();
+				scene.needRender = true;
 			});
 
 			let count = 0;
 			function animate() {
 
-				if (needRender) {
+				if (scene.needRender) {
 					// 计算点坐标及颜色
-					metaObj.compute(metaObj.S);
-
 					renderer.render(scene, camera);
 
-					needRender = false;
+					scene.needRender = false;
 				}
 
 				stats.update();
@@ -99,7 +98,8 @@
 			const socket = connectSocket();
 			socket.on("data.get", function (msg) {
 				metaObj.S = parseFloat(msg["in1"]);
-				needRender = true;
+				metaObj.compute(metaObj.S);
+				scene.needRender = true;
 			});
 
 			animate();
