@@ -35,16 +35,18 @@ export default class MetaObject {
 
     this.makeFlex();
 
-    var vertexColorMaterial = new THREE.MeshBasicMaterial({ side: THREE.DoubleSide, vertexColors: THREE.VertexColors });
-    var metalMaterial = new THREE.MeshPhongMaterial({
+    // var vertexColorMaterial = new THREE.MeshBasicMaterial({ side: THREE.DoubleSide, vertexColors: THREE.VertexColors });
+    const metalMaterial = this.metalMaterial = new THREE.MeshPhongMaterial({
       side: THREE.DoubleSide,
+      vertexColors: THREE.VertexColors,
       color: 0xffffff,
-      emissive: 0xffffff,
-      specular: 0xffffff,
-      flatShading: true, // 必须设置，否则无法上色
-      blending: THREE.MultiplyBlending
+      emissive: 0x000000,
+      specular: 0x111111,
+      // shininess: 50,
+      // flatShading: true, // 必须设置，否则无法上色
     });
-    var mesh = new createMultiMaterialObject(g, [metalMaterial, vertexColorMaterial]);
+    // var mesh = new createMultiMaterialObject(g, [metalMaterial, vertexColorMaterial]);
+    var mesh = new THREE.Mesh(g, metalMaterial);
 
     mesh.traverse(function (child) {
       if (child instanceof THREE.Mesh) {
@@ -60,6 +62,9 @@ export default class MetaObject {
     const Bend = this.forceVoltage(this.S);
     this.setPoints(Bend);
     this.setColor();
+    this.metalMaterial.needsUpdate = true;
+    this.g.attributes.position.needsUpdate = true;
+    this.g.attributes.color.needsUpdate = true;
   }
 
   makeFlex() {
@@ -115,8 +120,9 @@ export default class MetaObject {
         vIdx++;
 
       }
-
     }
+
+    this.g.computeVertexNormals();
   }
 
   setColor() {
@@ -136,8 +142,6 @@ export default class MetaObject {
     this.g.vertices[posIdx] = y;
     this.g.vertices[posIdx + 1] = x;
     this.g.vertices[posIdx + 2] = z;
-
-    this.g.attributes.position.needsUpdate = true;
   }
 
   forceVoltage(value) {
